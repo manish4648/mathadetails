@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 interface FinancialRecord {
   sno: number;
@@ -8,8 +8,6 @@ interface FinancialRecord {
 }
 @Component({
   selector: 'app-tracker',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './tracker.component.html',
   styleUrl: './tracker.component.css'
 })
