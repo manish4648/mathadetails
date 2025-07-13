@@ -1,1 +1,64 @@
-<p>tracker works!</p>
+<div class="tracker-body">
+  <div class="tracker-container">
+    <h1 class="tracker-title">Durga Mata Financial Tracker</h1>
+
+    <div class="tracker-grid">
+      <!-- Left 2x2 Boxes -->
+      <div class="summary-container">
+        <div class="summary-grid">
+          <div class="box"><strong>Sponsors</strong><br>20,000</div>
+          <div class="box"><strong>Saree Amount</strong><br>1,00,000</div>
+          <div class="box"><strong>Estimation</strong><br>2,00,000</div>
+          <div class="box"><strong>Chanda</strong><br>10,000</div>
+        </div>
+      </div>
+
+      <!-- Right Big Box -->
+      <div class="big-box">
+        <div class="box-content">
+          <div style="display: flex; justify-content: space-between; width: 100%;">
+            <strong>Total budget</strong> <span>left</span>
+          </div>
+          <div style="font-size: 28px; margin-top: 10px;">1,30,999</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="table-header add-record-section">
+      <button class="action-btn add-record-btn" (click)="openAddRecordDialog()">Add Records</button>
+    </div>
+
+    <!-- Scrollable table container -->
+    <div class="table-scroll-container">
+      <table class="table-auto w-full border-collapse">
+        <thead class="bg-black bg-opacity-30">
+          <tr class="text-300">
+            <th>SNO</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of financialRecords; let i = index" class="fade-in">
+            <td>{{ entry.sno }}</td>
+            <td>{{ entry.description }}</td>
+            <td>{{ entry.date }}</td>
+            <td>₹{{ entry.amount }}</td>
+            <td>
+              <button class="action-btn px-2 py-1 rounded" (click)="addEntry(i)">Add</button>
+              <button class="action-btn  px-2 py-1 rounded ml-2" (click)="deleteEntry(i)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="action-btn refresh-btn" (click)="refresh()">Refresh</button>
+    </div>
+  </div>
+</div>
