@@ -6,20 +6,21 @@
       <!-- Left 2x2 Boxes -->
       <div class="summary-container">
         <div class="summary-grid">
-          <div class="box"><strong>Sponsors</strong><br>20,000</div>
-          <div class="box"><strong>Saree Amount</strong><br>1,00,000</div>
-          <div class="box"><strong>Estimation</strong><br>2,00,000</div>
-          <div class="box"><strong>Chanda</strong><br>10,000</div>
+          <div class="box summary-box-{{i}}" *ngFor="let summary of summaries.slice(0, 4); let i = index">
+            <strong>{{ summary.name }}</strong><br>
+            <div class="amount">{{ summary.displayAmount | number }}</div>
+          </div>
         </div>
       </div>
 
       <!-- Right Big Box -->
-      <div class="big-box">
+      <div class="big-box summary-box-4" *ngIf="summaries[4]">
         <div class="box-content">
           <div style="display: flex; justify-content: space-between; width: 100%;">
-            <strong>Total budget</strong> <span>left</span>
+            <strong>{{ summaries[4].name.split(' ')[0] + ' ' + summaries[4].name.split(' ')[1] }}</strong>
+            <span>{{ summaries[4].name.split(' ')[2] || '' }}</span>
           </div>
-          <div style="font-size: 28px; margin-top: 10px;">1,30,999</div>
+          <div class="amount" style="font-size: 28px; margin-top: 10px;">{{ summaries[4].displayAmount | number }}</div>
         </div>
       </div>
     </div>

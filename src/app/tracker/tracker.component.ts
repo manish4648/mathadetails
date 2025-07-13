@@ -19,11 +19,11 @@ export class TrackerComponent implements OnInit, AfterViewInit {
 
   title = 'Durga Mata Financial Tracker';
   summaries = [
-    { name: 'Sponsors', amount: 0, target: 20000 },
-    { name: 'Spare Amount', amount: 0, target: 100000 },
-    { name: 'Estimation', amount: 0, target: 200000 },
-    { name: 'Chanda', amount: 0, target: 10000 },
-    { name: 'Total Budget Left', amount: 0, target: 130999 }
+    { name: 'Sponsors', amount: 0, target: 20000, displayAmount: 0 },
+    { name: 'Spare Amount', amount: 0, target: 100000, displayAmount: 0 },
+    { name: 'Estimation', amount: 0, target: 200000, displayAmount: 0 },
+    { name: 'Chanda', amount: 0, target: 10000, displayAmount: 0 },
+    { name: 'Total Budget Left', amount: 0, target: 130999, displayAmount: 0 }
   ];
 
   financialRecords: FinancialRecord[] = [
@@ -43,49 +43,60 @@ export class TrackerComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.animateSummaries();
+      // Start counting animation after a short delay
+      setTimeout(() => {
+        this.startCountingAnimation();
+      }, 500);
       this.renderPage(this.currentPage);
     }
   }
 
-  animateSummaries() {
+  startCountingAnimation() {
     if (!isPlatformBrowser(this.platformId)) return;
 
     this.summaries.forEach((summary, index) => {
-      const box = document.querySelector(`.summary-box-${index}`);
-      if (box) {
-        const name = box.querySelector('.name');
-        const amount = box.querySelector('.amount');
-        const count = amount?.querySelector('.count');
-        if (name && amount && count) {
-          name.setAttribute('style', 'opacity: 0');
-          amount.setAttribute('style', 'opacity: 0');
-          count.textContent = '0';
-
-          setTimeout(() => {
-            name.setAttribute('style', 'animation: slideUpFade 1s ease-out forwards');
-            amount.setAttribute('style', 'animation: slideUpFade 1s ease-out forwards');
-          }, 100);
-
-          setTimeout(() => {
-            let start = 0;
-            const startTime = performance.now();
-            const duration = 1000;
-
-            const animate = (time: number) => {
-              const elapsed = time - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              const current = Math.floor(progress * summary.target);
-              count.textContent = current.toLocaleString();
-              if (progress < 1) {
-                requestAnimationFrame(animate);
-              }
-            };
-            requestAnimationFrame(animate);
-          }, 1000);
-        }
-      }
+      // Stagger the animation start for each box
+      setTimeout(() => {
+        this.animateCounter(summary, index);
+      }, index * 200); // 200ms delay between each box
     });
+  }
+
+  animateCounter(summary: any, index: number) {
+    const duration = 2000; // 2 seconds for counting animation
+    const startTime = performance.now();
+    const startValue = 0;
+    const endValue = summary.target;
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentValue = Math.floor(startValue + (endValue - startValue) * easeOutQuart);
+
+      // Update the display amount
+      summary.displayAmount = currentValue;
+
+      // Add pulse effect during counting
+      const amountElement = document.querySelector(`.summary-box-${index} .amount`);
+      if (amountElement) {
+        amountElement.classList.add('counting');
+        setTimeout(() => {
+          amountElement.classList.remove('counting');
+        }, 100);
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Final value
+        summary.displayAmount = endValue;
+      }
+    };
+
+    requestAnimationFrame(animate);
   }
 
   deleteRow(index: number) {
