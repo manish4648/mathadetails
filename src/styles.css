@@ -32,6 +32,21 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+/* Make any images responsive by default */
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* On small screens, reduce motion and remove background shimmer */
+@media (max-width: 600px) {
+  .reduce-motion *, .reduce-motion {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
 /* Custom black backdrop for Material dialogs */
 .mat-backdrop-black {
   background: rgba(0, 0, 0, 0.85) !important; /* rich black backdrop */

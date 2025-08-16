@@ -735,6 +735,28 @@
     overflow-x: hidden;
   }
 
+
+	  /* Mobile: avoid iOS Safari jank from fixed backgrounds */
+	  .tracker-body { background-attachment: scroll; }
+	  .tracker-body::before { display: none; }
+
+	  /* Touch devices: avoid hover-induced layout shifts */
+	  @media (hover: none) and (pointer: coarse) {
+	    .table-scroll-container tr:hover td { transform: none; background-color: rgba(0,0,0,0.3); }
+	    .box:hover, .big-box:hover { transform: none; }
+	  }
+
+	  /* Truncate long Description values */
+	  .table-scroll-container td:nth-child(2) {
+	    max-width: 160px;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	  }
+
+	  /* Reduce header shimmer on mobile (per user preference: no animated backgrounds) */
+	  .table-scroll-container th::after { display: none; animation: none; }
+
+
   /* Stack layout vertically on mobile */
   .tracker-grid {
     display: grid;
