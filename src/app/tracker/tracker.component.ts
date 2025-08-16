@@ -1,5 +1,9 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Firestore  ,collection, addDoc, getDocs, collectionData } from '@angular/fire/firestore';
+import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
 interface FinancialRecord {
   sno: number;
   description: string;
@@ -9,7 +13,7 @@ interface FinancialRecord {
 @Component({
   selector: 'app-tracker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,MatDialogModule ],
   templateUrl: './tracker.component.html',
   styleUrl: './tracker.component.css'
 })
@@ -26,20 +30,23 @@ export class TrackerComponent implements OnInit, AfterViewInit {
     { name: 'Total Budget Left', amount: 0, target: 130999, displayAmount: 0 }
   ];
 
-  financialRecords: FinancialRecord[] = [
-    { sno: 1, description: 'Donation from Sponsors', date: '2025-07-09 10:17 PM', amount: 20000 },
-    { sno: 2, description: 'Chanda Collection', date: '2025-07-09 10:17 PM', amount: 10000 }
-  ];
+  description = '';
+  amount = 0;
+  financialRecords: FinancialRecord[] = [];
 
   rowsPerPage = 5;
   currentPage = 1;
   pageCount = 0;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private firestore: Firestore,private dialog: MatDialog ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.pageCount = Math.ceil(this.financialRecords.length / this.rowsPerPage);
+    this.getFinancialRecords().subscribe(data => {
+      this.financialRecords = data;
+    });
   }
+  
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -159,6 +166,44 @@ export class TrackerComponent implements OnInit, AfterViewInit {
   deleteEntry(q:any){
 
   }
-openAddRecordDialog(){}
+openAddRecordDialog() {
+    const dialogRef = this.dialog.open(AddRecordDialogComponent, {
+      width: '400px',
+      backdropClass: 'mat-backdrop-black',
+      panelClass: 'add-record-dialog-panel'
+    });
+
+    dialogRef.afterClosed().subscribe(async (result: any) => {
+      if (result) {
+        try {
+          const docRef = await addDoc(collection(this.firestore, 'financialRecords'), {
+            description: result.description,
+            date: result.date,
+            amount: Number(result.amount),
+            createdAt: new Date()
+          });
+          this.financialRecords.push({
+            sno: this.financialRecords.length + 1,
+            description: result.description,
+            date: result.date,
+            amount: Number(result.amount)
+          });
+          console.log('Saved to Firestore with id:', docRef.id);
+        } catch (err) {
+          console.error('Error adding document to Firestore:', err);
+        }
+      }
+    });
+  }
+updateEntry(record: any){
+  
+}
+  getTotalAmount(): number {
+    return this.financialRecords.reduce((sum, r) => sum + r.amount, 0);
+  }
+   getFinancialRecords(): Observable<any[]> {
+    const recordsRef = collection(this.firestore, 'financialRecords');
+    return collectionData(recordsRef, { idField: 'id' }) as Observable<any[]>;
+  }
 }
 

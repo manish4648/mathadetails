@@ -28,7 +28,7 @@
 
   <div class="table-wrapper">
     <div class="table-header add-record-section">
-      <button class="action-btn add-record-btn" (click)="openAddRecordDialog()">Add Records</button>
+      <button class="action-btn add-record-btn" matButton (click)="openAddRecordDialog()">Add Records</button>
     </div>
 
     <!-- Scrollable table container -->
@@ -50,7 +50,7 @@
             <td>{{ entry.date }}</td>
             <td>₹{{ entry.amount }}</td>
             <td>
-              <button class="action-btn px-2 py-1 rounded" (click)="addEntry(i)">Add</button>
+              <button class="action-btn px-2 py-1 rounded" (click)="updateEntry(i)">Update</button>
               <button class="action-btn  px-2 py-1 rounded ml-2" (click)="deleteEntry(i)">Delete</button>
             </td>
           </tr>

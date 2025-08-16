@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Add New Record</h2>
+<mat-dialog-content>
+  <form #recordForm="ngForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Description</mat-label>
+      <input matInput name="description" [(ngModel)]="record.description" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Date</mat-label>
+      <input matInput type="date" name="date" [(ngModel)]="record.date" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" name="amount" [(ngModel)]="record.amount" required>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!recordForm.valid">Save</button>
+</mat-dialog-actions>

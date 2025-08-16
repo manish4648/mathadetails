@@ -25,3 +25,61 @@ app-root {
   width: 100%;
   min-height: 100vh;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* Custom black backdrop for Material dialogs */
+.mat-backdrop-black {
+  background: rgba(0, 0, 0, 0.85) !important; /* rich black backdrop */
+}
+
+
+/* Scope black+gold theme to Add Record dialog only */
+.add-record-dialog-panel .mat-mdc-dialog-surface {
+  background: linear-gradient(135deg, #000 0%, #0d0d0d 50%, #111 70%);
+  color: #bfa14f;
+  border: 1px solid rgba(191,161,79,0.5);
+}
+
+.add-record-dialog-panel [mat-dialog-title] {
+  color: #bfa14f;
+  text-shadow: 2px 2px 6px rgba(0,0,0,.8);
+}
+
+.add-record-dialog-panel mat-dialog-content {
+  background: rgba(0,0,0,0.35);
+}
+
+.add-record-dialog-panel .mdc-text-field .mdc-notched-outline__leading,
+.add-record-dialog-panel .mdc-text-field .mdc-notched-outline__notch,
+.add-record-dialog-panel .mdc-text-field .mdc-notched-outline__trailing {
+  border-color: rgba(191,161,79,0.5) !important;
+}
+.add-record-dialog-panel .mdc-text-field--focused .mdc-notched-outline__leading,
+.add-record-dialog-panel .mdc-text-field--focused .mdc-notched-outline__notch,
+.add-record-dialog-panel .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #d4af37 !important;
+}
+.add-record-dialog-panel .mat-mdc-input-element,
+.add-record-dialog-panel .mat-mdc-form-field-label {
+  color: #bfa14f !important;
+}
+
+.add-record-dialog-panel button[mat-button],
+.add-record-dialog-panel button[mat-raised-button] {
+  color: #bfa14f;
+  border-color: rgba(191,161,79,0.5);
+}
+.add-record-dialog-panel button[mat-raised-button] {
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 60%, #bfa14f 90%);
+}
+.add-record-dialog-panel button[mat-button] {
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+}
+.add-record-dialog-panel button[mat-button]:hover,
+.add-record-dialog-panel button[mat-raised-button]:hover {
+  background: linear-gradient(135deg, #bfa14f 0%, #000 100%);
+  color: #000;
+}
