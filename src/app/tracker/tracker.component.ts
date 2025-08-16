@@ -3,6 +3,8 @@ import { AfterViewInit, Component, ElementRef, Inject, OnInit, PLATFORM_ID, View
 import { Firestore  ,collection, addDoc, getDocs, collectionData } from '@angular/fire/firestore';
 import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { Observable } from 'rxjs';
 interface FinancialRecord {
   sno: number;
@@ -13,13 +15,13 @@ interface FinancialRecord {
 @Component({
   selector: 'app-tracker',
   standalone: true,
-  imports: [CommonModule,MatDialogModule ],
+  imports: [CommonModule, MatDialogModule, MatPaginatorModule, MatTableModule],
   templateUrl: './tracker.component.html',
   styleUrl: './tracker.component.css'
 })
 export class TrackerComponent implements OnInit, AfterViewInit {
   @ViewChild('financialRows') financialRows!: ElementRef<HTMLTableSectionElement>;
-  @ViewChild('pagination') pagination!: ElementRef<HTMLDivElement>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   title = 'Durga Mata Financial Tracker';
   summaries = [
@@ -33,17 +35,24 @@ export class TrackerComponent implements OnInit, AfterViewInit {
   description = '';
   amount = 0;
   financialRecords: FinancialRecord[] = [];
+  paginatedRecords: FinancialRecord[] = [];
 
-  rowsPerPage = 5;
-  currentPage = 1;
-  pageCount = 0;
+  // Pagination properties
+  pageSize = 5;
+  pageIndex = 0;
+  totalRecords = 0;
+  pageSizeOptions = [5, 10, 25, 50];
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private firestore: Firestore,private dialog: MatDialog ) {}
 
   async ngOnInit() {
-    this.pageCount = Math.ceil(this.financialRecords.length / this.rowsPerPage);
     this.getFinancialRecords().subscribe(data => {
-      this.financialRecords = data;
+      this.financialRecords = data.map((record, index) => ({
+        ...record,
+        sno: index + 1
+      }));
+      this.totalRecords = this.financialRecords.length;
+      this.updatePaginatedRecords();
     });
   }
   
@@ -54,8 +63,19 @@ export class TrackerComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.startCountingAnimation();
       }, 500);
-      this.renderPage(this.currentPage);
     }
+  }
+
+  updatePaginatedRecords() {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedRecords = this.financialRecords.slice(startIndex, endIndex);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePaginatedRecords();
   }
 
   startCountingAnimation() {
@@ -109,7 +129,7 @@ export class TrackerComponent implements OnInit, AfterViewInit {
   deleteRow(index: number) {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const globalIndex = (this.currentPage - 1) * this.rowsPerPage + index;
+    const globalIndex = (this.pageIndex * this.pageSize) + index;
     const row = this.financialRows.nativeElement.querySelector(`tr[data-index="${index}"]`);
     if (row) {
       row.classList.add('fade-out');
@@ -119,32 +139,13 @@ export class TrackerComponent implements OnInit, AfterViewInit {
           ...record,
           sno: i + 1
         }));
-        this.pageCount = Math.ceil(this.financialRecords.length / this.rowsPerPage);
-        if (this.currentPage > this.pageCount && this.pageCount > 0) {
-          this.currentPage = this.pageCount;
+        this.totalRecords = this.financialRecords.length;
+        // Adjust page index if current page is empty
+        if (this.pageIndex > 0 && this.paginatedRecords.length === 1) {
+          this.pageIndex--;
         }
-        this.renderPage(this.currentPage);
+        this.updatePaginatedRecords();
       }, 600);
-    }
-  }
-
-  renderPage(page: number) {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    this.currentPage = page;
-    const start = (page - 1) * this.rowsPerPage;
-    const end = start + this.rowsPerPage;
-    const paginatedRecords = this.financialRecords.slice(start, end);
-
-    if (this.pagination && this.pagination.nativeElement) {
-      this.pagination.nativeElement.innerHTML = '';
-      for (let i = 1; i <= this.pageCount; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i.toString();
-        btn.className = `px-3 py-1 rounded-full border border-yellow-300 hover:bg-yellow-300 hover:text-black ${i === page ? 'bg-yellow-300 text-black' : ''}`;
-        btn.addEventListener('click', () => this.renderPage(i));
-        this.pagination.nativeElement.appendChild(btn);
-      }
     }
   }
 
@@ -153,18 +154,12 @@ export class TrackerComponent implements OnInit, AfterViewInit {
       window.location.reload();
     }
   }
-
-  getPaginatedRecords(): FinancialRecord[] {
-    const start = (this.currentPage - 1) * this.rowsPerPage;
-    const end = start + this.rowsPerPage;
-    return this.financialRecords.slice(start, end);
-  }
-  addEntry(q:any){
-
+  addEntry(index: number) {
+    // This method can be used for inline editing if needed
   }
 
-  deleteEntry(q:any){
-
+  deleteEntry(index: number) {
+    this.deleteRow(index);
   }
 openAddRecordDialog() {
     const dialogRef = this.dialog.open(AddRecordDialogComponent, {
@@ -188,6 +183,8 @@ openAddRecordDialog() {
             date: result.date,
             amount: Number(result.amount)
           });
+          this.totalRecords = this.financialRecords.length;
+          this.updatePaginatedRecords();
           console.log('Saved to Firestore with id:', docRef.id);
         } catch (err) {
           console.error('Error adding document to Firestore:', err);

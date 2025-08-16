@@ -359,6 +359,36 @@
   }
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.fade-out {
+  animation: fade-out 0.6s ease-out forwards;
+}
+
 .table-header {
   display: flex;
   justify-content: flex-end;
@@ -543,6 +573,139 @@
   border-color: rgba(191, 161, 79, 0.8);
 }
 
+/* Paginator Styles - Mobile First Approach */
+.paginator-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+::ng-deep .custom-paginator {
+  background: linear-gradient(135deg, #000 0%, #1a1a1a 60%, #bfa14f 90%, #808080 100%) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(191, 161, 79, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+  color: #bfa14f !important;
+  padding: 8px 12px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-paginator-range-label {
+  color: #bfa14f !important;
+  font-size: 12px !important;
+  margin: 0 8px !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-icon-button {
+  color: #bfa14f !important;
+  border: 1px solid rgba(191, 161, 79, 0.3) !important;
+  border-radius: 6px !important;
+  margin: 0 2px !important;
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-icon-button:hover {
+  background: rgba(191, 161, 79, 0.2) !important;
+  color: #bfa14f !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-icon-button:disabled {
+  color: rgba(191, 161, 79, 0.3) !important;
+  border-color: rgba(191, 161, 79, 0.1) !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-select {
+  color: #bfa14f !important;
+  font-size: 12px !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-select-value {
+  color: #bfa14f !important;
+  font-size: 12px !important;
+}
+
+::ng-deep .custom-paginator .mat-mdc-select-arrow {
+  color: #bfa14f !important;
+}
+
+/* Mobile Paginator Fix - Global */
+@media screen and (max-width: 768px) {
+  .paginator-container {
+    padding: 0 3px;
+    overflow: hidden;
+    margin-top: 15px;
+  }
+
+  ::ng-deep .custom-paginator {
+    padding: 6px 4px !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-label {
+    font-size: 10px !important;
+    margin: 0 4px !important;
+    white-space: nowrap !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-icon-button {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    margin: 0 1px !important;
+  }
+
+  /* Ensure touch target matches reduced icon size */
+  ::ng-deep .custom-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-select {
+    font-size: 10px !important;
+    min-width: 60px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-select-value {
+    font-size: 10px !important;
+  }
+
+  /* Ensure paginator doesn't overflow */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    padding: 0 !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Improve dropdown styling on mobile */
+  ::ng-deep .mat-mdc-select-panel {
+    background: linear-gradient(135deg, #000 0%, #1a1a1a 60%, #bfa14f 90%, #808080 100%) !important;
+    border: 1px solid rgba(191, 161, 79, 0.5) !important;
+    border-radius: 6px !important;
+  }
+
+  ::ng-deep .mat-mdc-option {
+    color: #bfa14f !important;
+    font-size: 10px !important;
+    min-height: 36px !important;
+  }
+
+  ::ng-deep .mat-mdc-option:hover {
+    background: rgba(191, 161, 79, 0.2) !important;
+  }
+
+  ::ng-deep .mat-mdc-option.mdc-list-item--selected {
+    background: rgba(191, 161, 79, 0.3) !important;
+  }
+}
+
 /* Tablet Layout */
 @media screen and (max-width: 768px) {
   .tracker-body { padding: 8px; }
@@ -700,6 +863,104 @@
     min-height: 32px;
     margin: 0 1px;
   }
+
+  .paginator-container {
+    margin-top: 15px;
+    padding: 0 3px;
+  }
+
+  ::ng-deep .custom-paginator {
+    padding: 6px 4px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-label {
+    font-size: 10px !important;
+    margin: 0 4px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-icon-button {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    margin: 0 1px !important;
+  }
+
+  /* Keep entire paginator in a single line and prevent wrapping */
+  ::ng-deep .custom-paginator .mat-mdc-paginator {
+    width: 100% !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-outer-container,
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    flex-wrap: nowrap !important;
+  }
+
+
+  ::ng-deep .custom-paginator .mat-mdc-select {
+    font-size: 10px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-select-value {
+    font-size: 10px !important;
+  }
+
+  /* Keep paginator in a single row and save space */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+  }
+
+  /* Hide long label to avoid overflow; keep the select */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-page-size-label {
+    display: none !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-page-size {
+    margin-right: 4px !important;
+  }
+
+  /* Keep action group aligned right and icons centered */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-actions {
+    margin-left: auto !important;
+    justify-content: flex-end !important;
+    gap: 2px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-icon-button {
+    padding: 0 !important; /* remove inner padding to prevent visual offset */
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-icon-button .mat-icon {
+    font-size: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
+    line-height: 20px !important;
+  }
+
+
+  /* Keep select compact */
+  ::ng-deep .custom-paginator .mat-mdc-select {
+    min-width: 56px !important;
+    width: 64px !important;
+  }
+
+  /* Allow actions block to shrink */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-actions {
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-label {
+    flex: 0 1 auto !important;
+    margin: 0 4px !important;
+    white-space: nowrap !important;
+  }
+
 }
 
 /* Extra small screens - Optimized for very small devices */
@@ -826,5 +1087,111 @@
     font-size: 9px;
     min-height: 28px;
     margin: 0 1px;
+  }
+
+  .paginator-container {
+    margin-top: 10px;
+    padding: 0 2px;
+  }
+
+  /* Keep paginator items in one line with tighter spacing */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+
+  /* Prevent wrapping and tighten icon sizes */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-outer-container,
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    flex-wrap: nowrap !important;
+  }
+
+  /* Match touch target to 26px icons on very small screens */
+  ::ng-deep .custom-paginator .mat-mdc-icon-button .mat-mdc-button-touch-target {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  /* Add a bit of padding on the right so last arrow isn’t clipped */
+  ::ng-deep .custom-paginator {
+    padding-right: 8px !important;
+  }
+
+
+  ::ng-deep .custom-paginator .mat-mdc-icon-button {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-navigation-first,
+  ::ng-deep .custom-paginator .mat-mdc-paginator-navigation-previous,
+  ::ng-deep .custom-paginator .mat-mdc-paginator-navigation-next,
+  ::ng-deep .custom-paginator .mat-mdc-paginator-navigation-last {
+    margin: 0 1px !important;
+  }
+
+
+  /* Hide long label to save space */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-page-size-label {
+    display: none !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-page-size {
+    margin-right: 2px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-select {
+    min-width: 52px !important;
+    width: 60px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-actions { min-width: 0 !important; }
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-label { flex: 0 1 auto !important; margin: 0 2px !important; white-space: nowrap !important; }
+
+
+  ::ng-deep .custom-paginator {
+    padding: 4px 2px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-range-label {
+    font-size: 9px !important;
+    margin: 0 2px !important;
+    white-space: nowrap !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-icon-button {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    margin: 0 1px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-select {
+    font-size: 9px !important;
+    min-width: 50px !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-select-value {
+    font-size: 9px !important;
+  }
+
+  /* Fix mobile paginator overflow */
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  ::ng-deep .custom-paginator .mat-mdc-paginator-outer-container {
+    min-height: auto !important;
+  }
+
+  /* Extra small screen dropdown improvements */
+  ::ng-deep .mat-mdc-option {
+    font-size: 9px !important;
+    min-height: 32px !important;
   }
 }

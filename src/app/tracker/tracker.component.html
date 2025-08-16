@@ -43,8 +43,8 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let entry of financialRecords; let i = index" class="fade-in">
+        <tbody #financialRows>
+          <tr *ngFor="let entry of paginatedRecords; let i = index" class="fade-in" [attr.data-index]="i">
             <td>{{ entry.sno }}</td>
             <td>{{ entry.description }}</td>
             <td>{{ entry.date }}</td>
@@ -56,6 +56,19 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Angular Material Paginator -->
+    <div class="paginator-container">
+      <mat-paginator
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+        class="custom-paginator">
+      </mat-paginator>
     </div>
 
     <div class="text-center mt-4">
